@@ -1,0 +1,325 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:GasServiceApp.ViewModels"
+        mc:Ignorable="d"
+        x:Class="GasServiceApp.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        x:CompileBindings="False"
+        Title="&#x421;&#x438;&#x441;&#x442;&#x435;&#x43C;&#x430; &#x43E;&#x431;&#x441;&#x43B;&#x443;&#x436;&#x438;&#x432;&#x430;&#x43D;&#x438;&#x44F; &#x433;&#x430;&#x437;&#x43E;&#x432;&#x43E;&#x433;&#x43E; &#x43E;&#x431;&#x43E;&#x440;&#x443;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44F;"
+        Width="1280"
+        Height="780"
+        MinWidth="1050"
+        MinHeight="660"
+        Background="#EEF2F7"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}">
+
+    <Window.Styles>
+        <Style Selector="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="GridLinesVisibility" Value="All"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#E5E7EB"/>
+            <Setter Property="VerticalGridLinesBrush" Value="#E5E7EB"/>
+            <Setter Property="RowHeight" Value="38"/>
+            <Setter Property="ColumnHeaderHeight" Value="42"/>
+            <Setter Property="CanUserResizeColumns" Value="True"/>
+            <Setter Property="CanUserSortColumns" Value="True"/>
+            <Setter Property="RowBackground" Value="White"/>
+        </Style>
+        <Style Selector="TabControl"><Setter Property="Background" Value="Transparent"/></Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="14,9"/>
+            <Setter Property="Foreground" Value="#334155"/>
+        </Style>
+        <Style Selector="TextBox.formInput">
+            <Setter Property="Width" Value="230"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
+        </Style>
+        <Style Selector="Button.primaryButton">
+            <Setter Property="Background" Value="#1F4E5F"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Margin" Value="0,4,0,0"/>
+        </Style>
+        <Style Selector="TextBlock.sectionTitle">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#12343B"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+    </Window.Styles>
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Background="#1F4E5F" Padding="22,18">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel>
+                    <TextBlock Text="&#x413;&#x430;&#x437;&#x43E;&#x432;&#x430;&#x44F; &#x441;&#x43B;&#x443;&#x436;&#x431;&#x430;" Foreground="White" FontSize="28" FontWeight="SemiBold"/>
+                    <TextBlock Text="&#x423;&#x447;&#x435;&#x442; &#x430;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442;&#x43E;&#x432;, &#x430;&#x434;&#x440;&#x435;&#x441;&#x43E;&#x432;, &#x43E;&#x431;&#x43E;&#x440;&#x443;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44F;, &#x43C;&#x430;&#x441;&#x442;&#x435;&#x440;&#x43E;&#x432;, &#x437;&#x430;&#x44F;&#x432;&#x43E;&#x43A;, &#x440;&#x430;&#x431;&#x43E;&#x442; &#x438; &#x440;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442;&#x43E;&#x432; &#x43F;&#x440;&#x43E;&#x432;&#x435;&#x440;&#x43A;&#x438;" Foreground="#DDEAF0" FontSize="14" Margin="0,6,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <Border Background="#EAF6F6" Padding="14,10" CornerRadius="6"><TextBlock Text="{Binding ClientsSummary}" Foreground="#12343B" FontWeight="SemiBold"/></Border>
+                    <Border Background="#FFF4D6" Padding="14,10" CornerRadius="6"><TextBlock Text="{Binding RequestsSummary}" Foreground="#5B4211" FontWeight="SemiBold"/></Border>
+                    <Border Background="#FDE2E2" Padding="14,10" CornerRadius="6"><TextBlock Text="{Binding OverdueSummary}" Foreground="#7F1D1D" FontWeight="SemiBold"/></Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border DockPanel.Dock="Bottom" Background="White" BorderBrush="#CBD5E1" BorderThickness="0,1,0,0" Padding="14,10">
+            <TextBlock Text="{Binding StatusMessage}" Foreground="#334155" TextWrapping="Wrap"/>
+        </Border>
+
+        <TabControl Margin="16">
+            <TabItem Header="&#x414;&#x43E;&#x431;&#x430;&#x432;&#x43B;&#x435;&#x43D;&#x438;&#x435;">
+                <ScrollViewer>
+                    <StackPanel Spacing="14">
+                        <Border Background="White" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="8" Padding="16">
+                            <StackPanel>
+                                <TextBlock Classes="sectionTitle" Text="&#x41D;&#x43E;&#x432;&#x44B;&#x439; &#x430;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442;"/>
+                                <WrapPanel>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41B;&#x438;&#x446;&#x435;&#x432;&#x43E;&#x439; &#x441;&#x447;&#x435;&#x442;" Text="{Binding NewClientAccountNumber}"/>
+                                    <TextBox Classes="formInput" Width="300" PlaceholderText="&#x424;&#x418;&#x41E;" Text="{Binding NewClientFullName}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x422;&#x435;&#x43B;&#x435;&#x444;&#x43E;&#x43D;" Text="{Binding NewClientPhone}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="Email" Text="{Binding NewClientEmail}"/>
+                                    <TextBox Classes="formInput" Width="420" PlaceholderText="&#x41F;&#x440;&#x438;&#x43C;&#x435;&#x447;&#x430;&#x43D;&#x438;&#x435;" Text="{Binding NewClientNotes}"/>
+                                </WrapPanel>
+                                <Button Classes="primaryButton" Content="&#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x430;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442;&#x430;" Command="{Binding AddClientCommand}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="White" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="8" Padding="16">
+                            <StackPanel>
+                                <TextBlock Classes="sectionTitle" Text="&#x41D;&#x43E;&#x432;&#x44B;&#x439; &#x430;&#x434;&#x440;&#x435;&#x441;"/>
+                                <WrapPanel>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x430;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442;&#x430;" Text="{Binding NewAddressClientId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x413;&#x43E;&#x440;&#x43E;&#x434;" Text="{Binding NewAddressCity}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x423;&#x43B;&#x438;&#x446;&#x430;" Text="{Binding NewAddressStreet}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x414;&#x43E;&#x43C;" Text="{Binding NewAddressHouse}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41A;&#x432;&#x430;&#x440;&#x442;&#x438;&#x440;&#x430;" Text="{Binding NewAddressApartment}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41F;&#x43E;&#x434;&#x44A;&#x435;&#x437;&#x434;" Text="{Binding NewAddressEntrance}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x42D;&#x442;&#x430;&#x436;" Text="{Binding NewAddressFloor}"/>
+                                </WrapPanel>
+                                <Button Classes="primaryButton" Content="&#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x430;&#x434;&#x440;&#x435;&#x441;" Command="{Binding AddAddressCommand}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="White" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="8" Padding="16">
+                            <StackPanel>
+                                <TextBlock Classes="sectionTitle" Text="&#x41D;&#x43E;&#x432;&#x43E;&#x435; &#x43E;&#x431;&#x43E;&#x440;&#x443;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x435;"/>
+                                <WrapPanel>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x430;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442;&#x430;" Text="{Binding NewEquipmentClientId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x430;&#x434;&#x440;&#x435;&#x441;&#x430;" Text="{Binding NewEquipmentAddressId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x421;&#x435;&#x440;&#x438;&#x439;&#x43D;&#x44B;&#x439; &#x43D;&#x43E;&#x43C;&#x435;&#x440;" Text="{Binding NewEquipmentSerialNumber}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x422;&#x438;&#x43F;" Text="{Binding NewEquipmentType}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41F;&#x440;&#x43E;&#x438;&#x437;&#x432;&#x43E;&#x434;&#x438;&#x442;&#x435;&#x43B;&#x44C;" Text="{Binding NewEquipmentManufacturer}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41C;&#x43E;&#x434;&#x435;&#x43B;&#x44C;" Text="{Binding NewEquipmentModel}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41C;&#x435;&#x441;&#x442;&#x43E; &#x443;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43A;&#x438;" Text="{Binding NewEquipmentLocation}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x421;&#x442;&#x430;&#x442;&#x443;&#x441;" Text="{Binding NewEquipmentStatus}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x414;&#x430;&#x442;&#x430; &#x443;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43A;&#x438;" Text="{Binding NewEquipmentInstallationDate}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x421;&#x43B;&#x435;&#x434;&#x443;&#x44E;&#x449;&#x430;&#x44F; &#x43F;&#x440;&#x43E;&#x432;&#x435;&#x440;&#x43A;&#x430;" Text="{Binding NewEquipmentNextInspectionDate}"/>
+                                </WrapPanel>
+                                <Button Classes="primaryButton" Content="&#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x43E;&#x431;&#x43E;&#x440;&#x443;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x435;" Command="{Binding AddEquipmentCommand}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="White" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="8" Padding="16">
+                            <StackPanel>
+                                <TextBlock Classes="sectionTitle" Text="&#x41D;&#x43E;&#x432;&#x44B;&#x439; &#x43C;&#x430;&#x441;&#x442;&#x435;&#x440;"/>
+                                <WrapPanel>
+                                    <TextBox Classes="formInput" Width="300" PlaceholderText="&#x424;&#x418;&#x41E;" Text="{Binding NewMasterFullName}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x422;&#x435;&#x43B;&#x435;&#x444;&#x43E;&#x43D;" Text="{Binding NewMasterPhone}"/>
+                                    <TextBox Classes="formInput" Width="300" PlaceholderText="&#x421;&#x43F;&#x435;&#x446;&#x438;&#x430;&#x43B;&#x438;&#x437;&#x430;&#x446;&#x438;&#x44F;" Text="{Binding NewMasterSpecialization}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41A;&#x432;&#x430;&#x43B;&#x438;&#x444;&#x438;&#x43A;&#x430;&#x446;&#x438;&#x44F;" Text="{Binding NewMasterQualification}"/>
+                                </WrapPanel>
+                                <Button Classes="primaryButton" Content="&#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x43C;&#x430;&#x441;&#x442;&#x435;&#x440;&#x430;" Command="{Binding AddMasterCommand}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="White" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="8" Padding="16">
+                            <StackPanel>
+                                <TextBlock Classes="sectionTitle" Text="&#x41D;&#x43E;&#x432;&#x430;&#x44F; &#x437;&#x430;&#x44F;&#x432;&#x43A;&#x430;"/>
+                                <WrapPanel>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x430;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442;&#x430;" Text="{Binding NewRequestClientId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x430;&#x434;&#x440;&#x435;&#x441;&#x430;" Text="{Binding NewRequestAddressId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x43E;&#x431;&#x43E;&#x440;&#x443;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44F;" Text="{Binding NewRequestEquipmentId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x43C;&#x430;&#x441;&#x442;&#x435;&#x440;&#x430; (&#x43C;&#x43E;&#x436;&#x43D;&#x43E; &#x43F;&#x443;&#x441;&#x442;&#x43E;)" Text="{Binding NewRequestMasterId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x422;&#x438;&#x43F; &#x437;&#x430;&#x44F;&#x432;&#x43A;&#x438;" Text="{Binding NewRequestType}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41F;&#x440;&#x438;&#x43E;&#x440;&#x438;&#x442;&#x435;&#x442;" Text="{Binding NewRequestPriority}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x421;&#x442;&#x430;&#x442;&#x443;&#x441;" Text="{Binding NewRequestStatus}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x421;&#x440;&#x43E;&#x43A; &#x432;&#x44B;&#x43F;&#x43E;&#x43B;&#x43D;&#x435;&#x43D;&#x438;&#x44F;" Text="{Binding NewRequestDeadlineDate}"/>
+                                    <TextBox Classes="formInput" Width="500" PlaceholderText="&#x41E;&#x43F;&#x438;&#x441;&#x430;&#x43D;&#x438;&#x435;" Text="{Binding NewRequestDescription}"/>
+                                </WrapPanel>
+                                <Button Classes="primaryButton" Content="&#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x437;&#x430;&#x44F;&#x432;&#x43A;&#x443;" Command="{Binding AddRequestCommand}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="White" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="8" Padding="16">
+                            <StackPanel>
+                                <TextBlock Classes="sectionTitle" Text="&#x412;&#x44B;&#x43F;&#x43E;&#x43B;&#x43D;&#x435;&#x43D;&#x43D;&#x430;&#x44F; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x430;"/>
+                                <WrapPanel>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x437;&#x430;&#x44F;&#x432;&#x43A;&#x438;" Text="{Binding NewWorkRequestId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x43C;&#x430;&#x441;&#x442;&#x435;&#x440;&#x430;" Text="{Binding NewWorkMasterId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x412;&#x438;&#x434; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x44B;" Text="{Binding NewWorkType}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41C;&#x430;&#x442;&#x435;&#x440;&#x438;&#x430;&#x43B;&#x44B;" Text="{Binding NewWorkMaterials}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x421;&#x442;&#x43E;&#x438;&#x43C;&#x43E;&#x441;&#x442;&#x44C;" Text="{Binding NewWorkCost}"/>
+                                    <TextBox Classes="formInput" Width="500" PlaceholderText="&#x420;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442;" Text="{Binding NewWorkResult}"/>
+                                </WrapPanel>
+                                <Button Classes="primaryButton" Content="&#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x443;" Command="{Binding AddWorkRecordCommand}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="White" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="8" Padding="16">
+                            <StackPanel>
+                                <TextBlock Classes="sectionTitle" Text="&#x420;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442; &#x43F;&#x440;&#x43E;&#x432;&#x435;&#x440;&#x43A;&#x438;"/>
+                                <WrapPanel>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x437;&#x430;&#x44F;&#x432;&#x43A;&#x438;" Text="{Binding NewInspectionRequestId}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="ID &#x43E;&#x431;&#x43E;&#x440;&#x443;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44F;" Text="{Binding NewInspectionEquipmentId}"/>
+                                    <CheckBox Margin="0,0,14,10" Content="&#x411;&#x435;&#x437;&#x43E;&#x43F;&#x430;&#x441;&#x43D;&#x43E;" IsChecked="{Binding NewInspectionIsSafe}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x41F;&#x440;&#x43E;&#x432;&#x435;&#x440;&#x43A;&#x430; &#x443;&#x442;&#x435;&#x447;&#x435;&#x43A;" Text="{Binding NewInspectionGasLeakCheck}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x412;&#x435;&#x43D;&#x442;&#x438;&#x43B;&#x44F;&#x446;&#x438;&#x44F;" Text="{Binding NewInspectionVentilationCheck}"/>
+                                    <TextBox Classes="formInput" PlaceholderText="&#x410;&#x432;&#x442;&#x43E;&#x43C;&#x430;&#x442;&#x438;&#x43A;&#x430;" Text="{Binding NewInspectionAutomationCheck}"/>
+                                    <TextBox Classes="formInput" Width="420" PlaceholderText="&#x417;&#x430;&#x43A;&#x43B;&#x44E;&#x447;&#x435;&#x43D;&#x438;&#x435;" Text="{Binding NewInspectionConclusion}"/>
+                                    <TextBox Classes="formInput" Width="420" PlaceholderText="&#x420;&#x435;&#x43A;&#x43E;&#x43C;&#x435;&#x43D;&#x434;&#x430;&#x446;&#x438;&#x438;" Text="{Binding NewInspectionRecommendations}"/>
+                                </WrapPanel>
+                                <Button Classes="primaryButton" Content="&#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x43F;&#x440;&#x43E;&#x432;&#x435;&#x440;&#x43A;&#x443;" Command="{Binding AddInspectionCommand}"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            
+            <TabItem Header="&#x410;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442;&#x44B;">
+                <DataGrid ItemsSource="{Binding Clients}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
+                        <DataGridTextColumn Header="&#x41B;&#x438;&#x446;&#x435;&#x432;&#x43E;&#x439; &#x441;&#x447;&#x435;&#x442;" Binding="{Binding AccountNumber}" Width="130"/>
+                        <DataGridTextColumn Header="&#x424;&#x418;&#x41E;" Binding="{Binding FullName}" Width="240"/>
+                        <DataGridTextColumn Header="&#x422;&#x435;&#x43B;&#x435;&#x444;&#x43E;&#x43D;" Binding="{Binding Phone}" Width="160"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="190"/>
+                        <DataGridTextColumn Header="&#x41F;&#x440;&#x438;&#x43C;&#x435;&#x447;&#x430;&#x43D;&#x438;&#x435;" Binding="{Binding Notes}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="&#x410;&#x434;&#x440;&#x435;&#x441;&#x430;">
+                <DataGrid ItemsSource="{Binding Addresses}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
+                        <DataGridTextColumn Header="&#x410;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442; ID" Binding="{Binding ClientId}" Width="110"/>
+                        <DataGridTextColumn Header="&#x413;&#x43E;&#x440;&#x43E;&#x434;" Binding="{Binding City}" Width="130"/>
+                        <DataGridTextColumn Header="&#x423;&#x43B;&#x438;&#x446;&#x430;" Binding="{Binding Street}" Width="170"/>
+                        <DataGridTextColumn Header="&#x414;&#x43E;&#x43C;" Binding="{Binding House}" Width="80"/>
+                        <DataGridTextColumn Header="&#x41A;&#x432;." Binding="{Binding Apartment}" Width="80"/>
+                        <DataGridTextColumn Header="&#x41F;&#x43E;&#x43B;&#x43D;&#x44B;&#x439; &#x430;&#x434;&#x440;&#x435;&#x441;" Binding="{Binding FullAddress}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="&#x41E;&#x431;&#x43E;&#x440;&#x443;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x435;">
+                <DataGrid ItemsSource="{Binding Equipment}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
+                        <DataGridTextColumn Header="&#x422;&#x438;&#x43F;" Binding="{Binding Type}" Width="180"/>
+                        <DataGridTextColumn Header="&#x41F;&#x440;&#x43E;&#x438;&#x437;&#x432;&#x43E;&#x434;&#x438;&#x442;&#x435;&#x43B;&#x44C;" Binding="{Binding Manufacturer}" Width="150"/>
+                        <DataGridTextColumn Header="&#x41C;&#x43E;&#x434;&#x435;&#x43B;&#x44C;" Binding="{Binding Model}" Width="160"/>
+                        <DataGridTextColumn Header="&#x421;&#x435;&#x440;&#x438;&#x439;&#x43D;&#x44B;&#x439; &#x43D;&#x43E;&#x43C;&#x435;&#x440;" Binding="{Binding SerialNumber}" Width="190"/>
+                        <DataGridTextColumn Header="&#x41C;&#x435;&#x441;&#x442;&#x43E;" Binding="{Binding Location}" Width="180"/>
+                        <DataGridTextColumn Header="&#x421;&#x442;&#x430;&#x442;&#x443;&#x441;" Binding="{Binding Status}" Width="170"/>
+                        <DataGridTextColumn Header="&#x421;&#x43B;&#x435;&#x434;&#x443;&#x44E;&#x449;&#x430;&#x44F; &#x43F;&#x440;&#x43E;&#x432;&#x435;&#x440;&#x43A;&#x430;" Binding="{Binding NextInspectionDate, StringFormat='{}{0:dd.MM.yyyy}'}" Width="160"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="&#x41C;&#x430;&#x441;&#x442;&#x435;&#x440;&#x430;">
+                <DataGrid ItemsSource="{Binding Masters}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
+                        <DataGridTextColumn Header="&#x424;&#x418;&#x41E;" Binding="{Binding FullName}" Width="240"/>
+                        <DataGridTextColumn Header="&#x422;&#x435;&#x43B;&#x435;&#x444;&#x43E;&#x43D;" Binding="{Binding Phone}" Width="160"/>
+                        <DataGridTextColumn Header="&#x421;&#x43F;&#x435;&#x446;&#x438;&#x430;&#x43B;&#x438;&#x437;&#x430;&#x446;&#x438;&#x44F;" Binding="{Binding Specialization}" Width="260"/>
+                        <DataGridTextColumn Header="&#x41A;&#x432;&#x430;&#x43B;&#x438;&#x444;&#x438;&#x43A;&#x430;&#x446;&#x438;&#x44F;" Binding="{Binding Qualification}" Width="160"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="&#x417;&#x430;&#x44F;&#x432;&#x43A;&#x438;">
+                <DataGrid ItemsSource="{Binding Requests}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
+                        <DataGridTextColumn Header="&#x422;&#x438;&#x43F; &#x437;&#x430;&#x44F;&#x432;&#x43A;&#x438;" Binding="{Binding RequestType}" Width="170"/>
+                        <DataGridTextColumn Header="&#x41F;&#x440;&#x438;&#x43E;&#x440;&#x438;&#x442;&#x435;&#x442;" Binding="{Binding Priority}" Width="110"/>
+                        <DataGridTextColumn Header="&#x421;&#x442;&#x430;&#x442;&#x443;&#x441;" Binding="{Binding Status}" Width="130"/>
+                        <DataGridTextColumn Header="&#x41C;&#x430;&#x441;&#x442;&#x435;&#x440; ID" Binding="{Binding MasterId}" Width="100"/>
+                        <DataGridTextColumn Header="&#x414;&#x430;&#x442;&#x430; &#x437;&#x430;&#x44F;&#x432;&#x43A;&#x438;" Binding="{Binding RequestDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" Width="160"/>
+                        <DataGridTextColumn Header="&#x421;&#x440;&#x43E;&#x43A;" Binding="{Binding DeadlineDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" Width="160"/>
+                        <DataGridTextColumn Header="&#x41E;&#x43F;&#x438;&#x441;&#x430;&#x43D;&#x438;&#x435;" Binding="{Binding Description}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="&#x420;&#x430;&#x431;&#x43E;&#x442;&#x44B;">
+                <DataGrid ItemsSource="{Binding WorkRecords}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
+                        <DataGridTextColumn Header="&#x417;&#x430;&#x44F;&#x432;&#x43A;&#x430; ID" Binding="{Binding ServiceRequestId}" Width="100"/>
+                        <DataGridTextColumn Header="&#x41C;&#x430;&#x441;&#x442;&#x435;&#x440; ID" Binding="{Binding MasterId}" Width="100"/>
+                        <DataGridTextColumn Header="&#x414;&#x430;&#x442;&#x430; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x44B;" Binding="{Binding WorkDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" Width="160"/>
+                        <DataGridTextColumn Header="&#x412;&#x438;&#x434; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x44B;" Binding="{Binding WorkType}" Width="220"/>
+                        <DataGridTextColumn Header="&#x41C;&#x430;&#x442;&#x435;&#x440;&#x438;&#x430;&#x43B;&#x44B;" Binding="{Binding MaterialsUsed}" Width="220"/>
+                        <DataGridTextColumn Header="&#x421;&#x442;&#x43E;&#x438;&#x43C;&#x43E;&#x441;&#x442;&#x44C;" Binding="{Binding Cost}" Width="120"/>
+                        <DataGridTextColumn Header="&#x420;&#x435;&#x437;&#x443;&#x43B;&#x44C;&#x442;&#x430;&#x442;" Binding="{Binding Result}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="&#x41F;&#x440;&#x43E;&#x432;&#x435;&#x440;&#x43A;&#x438;">
+                <DataGrid ItemsSource="{Binding InspectionResults}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
+                        <DataGridTextColumn Header="&#x417;&#x430;&#x44F;&#x432;&#x43A;&#x430; ID" Binding="{Binding ServiceRequestId}" Width="100"/>
+                        <DataGridTextColumn Header="&#x414;&#x430;&#x442;&#x430; &#x43F;&#x440;&#x43E;&#x432;&#x435;&#x440;&#x43A;&#x438;" Binding="{Binding InspectionDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" Width="160"/>
+                        <DataGridTextColumn Header="&#x423;&#x442;&#x435;&#x447;&#x43A;&#x438;" Binding="{Binding GasLeakCheck}" Width="180"/>
+                        <DataGridTextColumn Header="&#x412;&#x435;&#x43D;&#x442;&#x438;&#x43B;&#x44F;&#x446;&#x438;&#x44F;" Binding="{Binding VentilationCheck}" Width="190"/>
+                        <DataGridTextColumn Header="&#x410;&#x432;&#x442;&#x43E;&#x43C;&#x430;&#x442;&#x438;&#x43A;&#x430;" Binding="{Binding AutomationCheck}" Width="190"/>
+                        <DataGridTextColumn Header="&#x417;&#x430;&#x43A;&#x43B;&#x44E;&#x447;&#x435;&#x43D;&#x438;&#x435;" Binding="{Binding Conclusion}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="&#x41E;&#x442;&#x447;&#x435;&#x442; &#x440;&#x430;&#x431;&#x43E;&#x442;">
+                <DataGrid ItemsSource="{Binding CompletedWorkReport}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="&#x417;&#x430;&#x44F;&#x432;&#x43A;&#x430;" Binding="{Binding RequestId}" Width="80"/>
+                        <DataGridTextColumn Header="&#x414;&#x430;&#x442;&#x430; &#x432;&#x44B;&#x43F;&#x43E;&#x43B;&#x43D;&#x435;&#x43D;&#x438;&#x44F;" Binding="{Binding CompletionDate, StringFormat='{}{0:dd.MM.yyyy}'}" Width="150"/>
+                        <DataGridTextColumn Header="&#x410;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442;" Binding="{Binding Client}" Width="220"/>
+                        <DataGridTextColumn Header="&#x410;&#x434;&#x440;&#x435;&#x441;" Binding="{Binding Address}" Width="260"/>
+                        <DataGridTextColumn Header="&#x41E;&#x431;&#x43E;&#x440;&#x443;&#x434;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x435;" Binding="{Binding Equipment}" Width="240"/>
+                        <DataGridTextColumn Header="&#x41C;&#x430;&#x441;&#x442;&#x435;&#x440;" Binding="{Binding Master}" Width="220"/>
+                        <DataGridTextColumn Header="&#x420;&#x430;&#x431;&#x43E;&#x442;&#x430;" Binding="{Binding WorkType}" Width="220"/>
+                        <DataGridTextColumn Header="&#x421;&#x442;&#x43E;&#x438;&#x43C;&#x43E;&#x441;&#x442;&#x44C;" Binding="{Binding Cost}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="&#x41A;&#x43E;&#x43D;&#x442;&#x440;&#x43E;&#x43B;&#x44C; &#x441;&#x440;&#x43E;&#x43A;&#x43E;&#x432;">
+                <DataGrid ItemsSource="{Binding OverdueRequests}" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="&#x417;&#x430;&#x44F;&#x432;&#x43A;&#x430;" Binding="{Binding RequestId}" Width="80"/>
+                        <DataGridTextColumn Header="&#x414;&#x430;&#x442;&#x430; &#x437;&#x430;&#x44F;&#x432;&#x43A;&#x438;" Binding="{Binding RequestDate, StringFormat='{}{0:dd.MM.yyyy}'}" Width="130"/>
+                        <DataGridTextColumn Header="&#x421;&#x440;&#x43E;&#x43A;" Binding="{Binding DeadlineDate, StringFormat='{}{0:dd.MM.yyyy}'}" Width="130"/>
+                        <DataGridTextColumn Header="&#x410;&#x431;&#x43E;&#x43D;&#x435;&#x43D;&#x442;" Binding="{Binding Client}" Width="220"/>
+                        <DataGridTextColumn Header="&#x410;&#x434;&#x440;&#x435;&#x441;" Binding="{Binding Address}" Width="260"/>
+                        <DataGridTextColumn Header="&#x41C;&#x430;&#x441;&#x442;&#x435;&#x440;" Binding="{Binding Master}" Width="220"/>
+                        <DataGridTextColumn Header="&#x421;&#x442;&#x430;&#x442;&#x443;&#x441;" Binding="{Binding Status}" Width="130"/>
+                        <DataGridTextColumn Header="&#x41E;&#x43F;&#x438;&#x441;&#x430;&#x43D;&#x438;&#x435;" Binding="{Binding Description}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

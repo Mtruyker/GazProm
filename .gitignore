@@ -1,0 +1,18 @@
+.vs/
+.idea/
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Build and user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Word temporary lock files
+~$*.docx
+
+# Generated verification artifacts
+coursework_render/
