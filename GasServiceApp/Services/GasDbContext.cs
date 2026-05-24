@@ -17,7 +17,7 @@ public class GasDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connectionString = Environment.GetEnvironmentVariable("GAS_SERVICE_DB")
-            ?? "Host=10.164.203.35;Port=5432;Database=gas_service_app;Username=postgres;Password=12345678";
+            ?? "Host=localhost;Port=5432;Database=gas_service_app;Username=postgres;Password=284650";
 
         optionsBuilder.UseNpgsql(connectionString);
     }

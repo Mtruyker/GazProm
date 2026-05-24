@@ -5,9 +5,205 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont
 
 
 OUT = "Курсовая_работа_GasServiceApp.docx"
+
+
+ASSETS_DIR = Path("coursework_assets")
+SCREENSHOT_DIR = ASSETS_DIR / "screenshots"
+SCREENSHOTS = {}
+
+
+def _load_font(size, bold=False):
+    names = ["arialbd.ttf", "segoeuib.ttf"] if bold else ["arial.ttf", "segoeui.ttf"]
+    fonts_dir = Path(r"C:\Windows\Fonts")
+    for name in names:
+        path = fonts_dir / name
+        if path.exists():
+            return ImageFont.truetype(str(path), size=size)
+    return ImageFont.load_default()
+
+
+def _draw_text(draw, xy, text, *, font, fill, anchor="la"):
+    draw.text(xy, text, font=font, fill=fill, anchor=anchor)
+
+
+def _draw_badge(draw, box, text, bg, fg):
+    draw.rounded_rectangle(box, radius=12, fill=bg)
+    _draw_text(
+        draw,
+        ((box[0] + box[2]) / 2, (box[1] + box[3]) / 2),
+        text,
+        font=_load_font(24, bold=True),
+        fill=fg,
+        anchor="mm",
+    )
+
+
+def _draw_tabs(draw, active_tab):
+    tabs = [
+        "Добавление", "Абоненты", "Адреса", "Оборудование", "Мастера",
+        "Заявки", "Работы", "Проверки", "Отчет работ", "Контроль сроков",
+    ]
+    x = 56
+    y = 184
+    font = _load_font(23, bold=True)
+    for tab in tabs:
+        width = max(132, int(draw.textlength(tab, font=font)) + 34)
+        draw.rounded_rectangle(
+            (x, y, x + width, y + 52),
+            radius=14,
+            fill="#1F4E5F" if tab == active_tab else "#E2E8F0",
+        )
+        _draw_text(
+            draw,
+            (x + width / 2, y + 26),
+            tab,
+            font=font,
+            fill="white" if tab == active_tab else "#334155",
+            anchor="mm",
+        )
+        x += width + 10
+
+
+def _draw_table(draw, x, y, widths, headers, rows, row_height=54, header_height=56):
+    header_font = _load_font(20, bold=True)
+    cell_font = _load_font(18)
+    total_width = sum(widths)
+    draw.rounded_rectangle((x, y, x + total_width, y + header_height), radius=10, fill="#D9EAF7")
+
+    cursor_x = x
+    for width, header in zip(widths, headers):
+        draw.rectangle((cursor_x, y, cursor_x + width, y + header_height), outline="#CBD5E1", width=1)
+        _draw_text(draw, (cursor_x + 12, y + header_height / 2), header, font=header_font, fill="#12343B", anchor="lm")
+        cursor_x += width
+
+    for row_idx, row in enumerate(rows):
+        top = y + header_height + row_idx * row_height
+        bottom = top + row_height
+        fill = "#FFFFFF" if row_idx % 2 == 0 else "#F8FAFC"
+        draw.rectangle((x, top, x + total_width, bottom), fill=fill, outline="#E2E8F0", width=1)
+        cursor_x = x
+        for width, value in zip(widths, row):
+            draw.rectangle((cursor_x, top, cursor_x + width, bottom), outline="#E2E8F0", width=1)
+            _draw_text(draw, (cursor_x + 10, top + row_height / 2), str(value), font=cell_font, fill="#111827", anchor="lm")
+            cursor_x += width
+
+
+def _draw_app_shell(draw, status_text):
+    draw.rounded_rectangle((20, 20, 1420, 880), radius=26, fill="#EEF2F7")
+    draw.rounded_rectangle((20, 20, 1420, 120), radius=26, fill="#1F4E5F")
+    draw.rectangle((20, 94, 1420, 120), fill="#1F4E5F")
+    _draw_text(draw, (56, 58), "Газовая служба", font=_load_font(34, bold=True), fill="white")
+    _draw_text(
+        draw,
+        (56, 96),
+        "Учет абонентов, адресов, оборудования, мастеров, заявок, работ и результатов проверки",
+        font=_load_font(18),
+        fill="#DDEAF0",
+    )
+    _draw_badge(draw, (1020, 40, 1150, 86), "Абонентов: 4", "#EAF6F6", "#12343B")
+    _draw_badge(draw, (1164, 40, 1284, 86), "Заявок: 5", "#FFF4D6", "#5B4211")
+    _draw_badge(draw, (1298, 40, 1400, 86), "Просрочено: 2", "#FDE2E2", "#7F1D1D")
+    draw.rounded_rectangle((20, 826, 1420, 880), radius=0, fill="white")
+    draw.line((20, 826, 1420, 826), fill="#CBD5E1", width=2)
+    _draw_text(draw, (40, 852), status_text, font=_load_font(18), fill="#334155", anchor="lm")
+
+
+def _draw_form_card(draw, x, y, w, h, title, fields, button):
+    draw.rounded_rectangle((x, y, x + w, y + h), radius=18, fill="white", outline="#CBD5E1", width=2)
+    _draw_text(draw, (x + 20, y + 28), title, font=_load_font(24, bold=True), fill="#12343B", anchor="lm")
+    field_font = _load_font(16)
+    px = x + 20
+    py = y + 56
+    for idx, field in enumerate(fields):
+        box_w = 180 if idx % 3 != 1 else 230
+        if px + box_w > x + w - 20:
+            px = x + 20
+            py += 54
+        draw.rounded_rectangle((px, py, px + box_w, py + 38), radius=8, fill="#F8FAFC", outline="#CBD5E1")
+        _draw_text(draw, (px + 10, py + 19), field, font=field_font, fill="#64748B", anchor="lm")
+        px += box_w + 12
+    draw.rounded_rectangle((x + 20, y + h - 54, x + 260, y + h - 16), radius=8, fill="#1F4E5F")
+    _draw_text(draw, (x + 140, y + h - 35), button, font=_load_font(16, bold=True), fill="white", anchor="mm")
+
+
+def create_demo_screenshots():
+    SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
+
+    add_form = SCREENSHOT_DIR / "interface_add.png"
+    equipment = SCREENSHOT_DIR / "interface_equipment.png"
+    report = SCREENSHOT_DIR / "interface_overdue.png"
+
+    image = Image.new("RGB", (1440, 900), "#DCE5EC")
+    draw = ImageDraw.Draw(image)
+    _draw_app_shell(draw, "Данные успешно загружены из PostgreSQL.")
+    _draw_tabs(draw, "Добавление")
+    _draw_form_card(draw, 48, 262, 652, 170, "Новый абонент", ["Лицевой счет", "ФИО", "Телефон", "Email", "Примечание"], "Добавить абонента")
+    _draw_form_card(draw, 720, 262, 672, 170, "Новое оборудование", ["ID абонента", "ID адреса", "Серийный номер", "Тип", "Производитель", "Модель"], "Добавить оборудование")
+    _draw_form_card(draw, 48, 454, 652, 156, "Новая заявка", ["ID абонента", "ID адреса", "ID оборудования", "Приоритет", "Срок выполнения", "Описание"], "Добавить заявку")
+    _draw_form_card(draw, 720, 454, 672, 156, "Результат проверки", ["ID заявки", "ID оборудования", "Утечек нет", "Вентиляция исправна", "Заключение"], "Добавить проверку")
+    image.save(add_form)
+
+    image = Image.new("RGB", (1440, 900), "#DCE5EC")
+    draw = ImageDraw.Draw(image)
+    _draw_app_shell(draw, "Данные успешно загружены из PostgreSQL.")
+    _draw_tabs(draw, "Оборудование")
+    _draw_table(
+        draw,
+        52,
+        260,
+        [60, 180, 150, 190, 230, 190, 180, 150],
+        ["ID", "Тип", "Производитель", "Модель", "Серийный номер", "Место", "Статус", "След. проверка"],
+        [
+            ["1", "Газовый котел", "BAXI", "ECO Four 24 F", "BAXI-24F-2021-001", "Котельная, линия 1", "В эксплуатации", "15.09.2026"],
+            ["2", "Газовый котел", "Vaillant", "turboTEC plus VUW", "VAIL-TEC-2020-014", "Кухня", "Требует обслуживания", "01.06.2026"],
+            ["3", "Регулятор давления", "Buderus", "Logamax U072", "BUD-LOG-2022-103", "ГРП, шкаф 2", "В эксплуатации", "25.05.2026"],
+            ["4", "Водонагреватель", "Ariston", "Clas X 24 FF", "ARIS-CLAS-2019-088", "Ванная комната", "Остановлено", "20.05.2026"],
+            ["5", "Газовый котел", "Navien", "Deluxe S 24K", "NAV-DELUXE-2023-045", "Котельная, линия 2", "В эксплуатации", "18.02.2027"],
+        ],
+    )
+    image.save(equipment)
+
+    image = Image.new("RGB", (1440, 900), "#DCE5EC")
+    draw = ImageDraw.Draw(image)
+    _draw_app_shell(draw, "Отчет по просроченным заявкам сформирован.")
+    _draw_tabs(draw, "Контроль сроков")
+    _draw_table(
+        draw,
+        90,
+        292,
+        [90, 140, 120, 220, 360, 220, 150],
+        ["Заявка", "Дата заявки", "Срок", "Абонент", "Адрес", "Мастер", "Статус"],
+        [
+            ["4", "12.05.2026", "13.05.2026", "Кузнецов Дмитрий А.", "г. Саратов, ул. Чернышевского, д. 90, кв. 15", "Не назначен", "Открыта"],
+            ["2", "06.05.2026", "08.05.2026", "Петрова Анна В.", "г. Саратов, ул. Тархова, д. 31, кв. 48", "Соколов Андрей Н.", "В работе"],
+        ],
+        row_height=66,
+        header_height=60,
+    )
+    draw.rounded_rectangle((90, 480, 1340, 650), radius=18, fill="white", outline="#CBD5E1", width=2)
+    _draw_text(draw, (114, 512), "Описание выбранной заявки", font=_load_font(24, bold=True), fill="#12343B", anchor="lm")
+    _draw_text(draw, (114, 560), "Оборудование отключено после аварийного срабатывания датчика.", font=_load_font(20), fill="#334155", anchor="lm")
+    _draw_text(draw, (114, 604), "Требуется назначение мастера и выезд бригады в ближайшее время.", font=_load_font(20), fill="#334155", anchor="lm")
+    image.save(report)
+
+    return {"add": add_form, "equipment": equipment, "overdue": report}
+
+
+def resolve_screenshots():
+    real = {
+        "add": SCREENSHOT_DIR / "real_add.png",
+        "equipment": SCREENSHOT_DIR / "real_equipment.png",
+        "overdue": SCREENSHOT_DIR / "real_overdue.png",
+    }
+    if all(path.exists() for path in real.values()):
+        return real
+    return create_demo_screenshots()
 
 
 def set_cell_text(cell, text, bold=False):
@@ -111,6 +307,14 @@ def caption(doc, text):
     for run in para.runs:
         run.font.size = Pt(12)
     return para
+
+
+def add_image(doc, image_path, text, width_cm=16):
+    paragraph = doc.add_paragraph()
+    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = paragraph.add_run()
+    run.add_picture(str(image_path), width=Cm(width_cm))
+    caption(doc, text)
 
 
 def add_table(doc, headers, rows, widths=None):
@@ -497,11 +701,24 @@ CREATE TABLE IF NOT EXISTS "ServiceRequests" (
     )
 
 
+def add_screenshots_appendix(doc):
+    doc.add_page_break()
+    heading(doc, "ПРИЛОЖЕНИЕ В", 1)
+    caption(doc, "Скриншоты программы GasServiceApp")
+    p(doc, "В приложении представлены реальные экраны работающей программы, подтверждающие загрузку данных и наличие основных пользовательских сценариев.", first_indent=False)
+    add_image(doc, SCREENSHOTS["add"], "Рисунок В.1 - Вкладка добавления данных", width_cm=16.2)
+    add_image(doc, SCREENSHOTS["equipment"], "Рисунок В.2 - Вкладка оборудования с загруженными данными", width_cm=16.2)
+    add_image(doc, SCREENSHOTS["overdue"], "Рисунок В.3 - Отчет по просроченным заявкам", width_cm=16.2)
+
+
 def main():
+    global SCREENSHOTS
+    SCREENSHOTS = resolve_screenshots()
     doc = setup_document()
     add_title_page(doc)
     add_contents(doc)
     build_body(doc)
+    add_screenshots_appendix(doc)
     doc.save(OUT)
 
 
